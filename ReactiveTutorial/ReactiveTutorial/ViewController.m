@@ -15,6 +15,7 @@
 @property (strong, nonatomic) IBOutletCollection(UISlider) NSArray *sliders;
 @property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *labels;
 
+
 @end
 
 @implementation ViewController
@@ -35,9 +36,12 @@
     
     for (int i = 0; i<3; i++) {
         
-        RACSignal *sliderValue = [[self.sliders[i] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
+        UISlider *slider = self.sliders[i];
+        slider.value = 128;
+        
+        RACSignal *sliderValue = [[[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);
-        }];
+        }] startWith:@(slider.value)];
         
         RAC(((UILabel*)self.labels[i]),text) = [sliderValue map:^id(NSNumber *value) {
             return [NSString stringWithFormat:@"%.0f",value.floatValue];
@@ -53,7 +57,6 @@
                                 blue:blue.floatValue/255
                                alpha:1.0];
     }];
-
 }
 
 @end
