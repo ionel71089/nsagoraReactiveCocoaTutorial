@@ -34,29 +34,25 @@
     NSMutableArray *sliderSignals = [NSMutableArray array];
     
     for (int i = 0; i<3; i++) {
-        UISlider *slider = self.sliders[i];
-        UILabel *label = self.labels[i];
         
-        RACSignal *sliderValue = [[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
+        RACSignal *sliderValue = [[self.sliders[i] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);
         }];
         
-        [sliderValue subscribeNext:^(NSNumber *value) {
-            label.text = [NSString stringWithFormat:@"%.0f",value.floatValue];
+        RAC(((UILabel*)self.labels[i]),text) = [sliderValue map:^id(NSNumber *value) {
+            return [NSString stringWithFormat:@"%.0f",value.floatValue];
         }];
         
         [sliderSignals addObject:sliderValue];
+        
     }
-
-    [[RACSignal combineLatest:sliderSignals] subscribeNext:^(RACTuple *values) {
-
-        UIColor *color = [UIColor colorWithRed:((NSNumber*)values[0]).floatValue/255
+    
+    RAC(self.tagColor,backgroundColor) = [[RACSignal combineLatest:sliderSignals] map:^(RACTuple *values) {
+        return [UIColor colorWithRed:((NSNumber*)values[0]).floatValue/255
                                          green:((NSNumber*)values[1]).floatValue/255
                                           blue:((NSNumber*)values[2]).floatValue/255
                                          alpha:1.0];
-        self.tagColor.backgroundColor = color;
-        
-    }];
+    }] ;
 
 }
 
