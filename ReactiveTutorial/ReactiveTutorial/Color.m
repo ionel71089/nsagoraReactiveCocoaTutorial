@@ -52,20 +52,20 @@
     return color;
 }
 
--(NSNumber*)objectAtIndexedSubscript:(NSUInteger)idx;
+-(RACSignal*)objectAtIndexedSubscript:(NSUInteger)idx;
 {
     assert(0 <= idx < 3);
     
     switch (idx)
     {
         case 0:
-            return self.red;
+            return RACObserve(self,red);
             
         case 1:
-            return self.green;
+            return RACObserve(self,green);
             
         case 2:
-            return self.blue;
+            return RACObserve(self,blue);
     }
     
     return nil;

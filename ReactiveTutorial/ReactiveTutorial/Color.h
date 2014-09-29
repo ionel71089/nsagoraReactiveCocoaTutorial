@@ -18,6 +18,6 @@
 +(Color*)randomColor;
 +(Color*)rozBomBon;
 
--(NSNumber*)objectAtIndexedSubscript:(NSUInteger)idx;
+-(RACSignal*)objectAtIndexedSubscript:(NSUInteger)idx;
 
 @end
