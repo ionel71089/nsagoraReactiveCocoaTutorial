@@ -9,11 +9,12 @@
 #import "ViewController.h"
 #import <ReactiveCocoa.h>
 
-@interface ViewController ()
+@interface ViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *tagColor;
 @property (strong, nonatomic) IBOutletCollection(UISlider) NSArray *sliders;
-@property (strong, nonatomic) IBOutletCollection(UILabel) NSArray *labels;
+
+@property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
 
 @end
@@ -37,17 +38,30 @@
     for (int i = 0; i<3; i++) {
         
         UISlider *slider = self.sliders[i];
+        UITextField *textField = self.textFields[i];
         slider.value = 128;
         
         RACSignal *sliderValue = [[[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);
         }] startWith:@(slider.value)];
         
-        RAC(((UILabel*)self.labels[i]),text) = [sliderValue map:^id(NSNumber *value) {
+        [sliderSignals addObject:sliderValue];
+        
+        RAC(textField,text) = [sliderValue map:^id(NSNumber *value) {
             return [NSString stringWithFormat:@"%.0f",value.floatValue];
         }];
         
-        [sliderSignals addObject:sliderValue];
+        RACSignal *textSignal = textField.rac_textSignal;
+        
+        RAC(textField,backgroundColor) = [textSignal map:^id(NSString *text) {
+            return [self textIsValidSliderValue:text] ? [UIColor clearColor] : [UIColor yellowColor];
+        }];
+        
+        RAC(slider,value) = [[textSignal filter:^BOOL(NSString *text) {
+            return [self textIsValidSliderValue:text];
+        }] map:^id(NSString *text) {
+            return @(text.integerValue);
+        }];
         
     }
     
@@ -57,6 +71,19 @@
                                 blue:blue.floatValue/255
                                alpha:1.0];
     }];
+}
+
+-(BOOL)textIsValidSliderValue:(NSString*)text
+{
+    NSScanner *scan = [NSScanner scannerWithString: text];
+    int holder;
+    return [scan scanInt: &holder] && [scan isAtEnd] && (0 <= holder && holder <= 255);
+}
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end
