@@ -37,9 +37,7 @@
         UISlider *slider = self.sliders[i];
         UILabel *label = self.labels[i];
         
-        RACSignal *sliderValueChanged = [slider rac_signalForControlEvents:UIControlEventValueChanged];
-        
-        RACSignal *sliderValue = [sliderValueChanged map:^id(UISlider *slider) {
+        RACSignal *sliderValue = [[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);
         }];
         
