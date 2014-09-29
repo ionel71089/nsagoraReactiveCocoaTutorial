@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>102EB3AC-895A-410E-BF6F-3021796671EA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ReactiveTutorial</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>27D0A66FF066DBBB340F3E1F15CDC059A13C6C4F</key>
+		<string>https://github.com/ionel71089/nsagoraReactiveCocoaTutorial.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ReactiveTutorial/ReactiveTutorial.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>27D0A66FF066DBBB340F3E1F15CDC059A13C6C4F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/ionel71089/nsagoraReactiveCocoaTutorial.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>27D0A66FF066DBBB340F3E1F15CDC059A13C6C4F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>27D0A66FF066DBBB340F3E1F15CDC059A13C6C4F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>reactive</string>
+		</dict>
+	</array>
+</dict>
+</plist>
