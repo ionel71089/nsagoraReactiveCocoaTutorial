@@ -37,28 +37,25 @@
         UISlider *slider = self.sliders[i];
         UILabel *label = self.labels[i];
         
-        RACSignal *signal = [slider rac_signalForControlEvents:UIControlEventValueChanged];
+        RACSignal *sliderValueChanged = [slider rac_signalForControlEvents:UIControlEventValueChanged];
         
-        [signal subscribeNext:^(UISlider *slider) {
-            label.text = [NSString stringWithFormat:@"%.0f",slider.value];
+        RACSignal *sliderValue = [sliderValueChanged map:^id(UISlider *slider) {
+            return @(slider.value);
         }];
         
-        [sliderSignals addObject:signal];
+        [sliderValue subscribeNext:^(NSNumber *value) {
+            label.text = [NSString stringWithFormat:@"%.0f",value.floatValue];
+        }];
+        
+        [sliderSignals addObject:sliderValue];
     }
 
-    [[RACSignal combineLatest:sliderSignals] subscribeNext:^(RACTuple *sliders) {
-        
-        NSMutableArray *values = [NSMutableArray array];
-        for (UISlider *slider in sliders) {
-            [values addObject:@(slider.value)];
-        }
-        
-        CGFloat red     = [values[0] floatValue];
-        CGFloat green   = [values[1] floatValue];
-        CGFloat blue    = [values[2] floatValue];
-        CGFloat alpha   = 1.0;
-        
-        UIColor *color = [UIColor colorWithRed:red/255 green:green/255 blue:blue/255 alpha:alpha];
+    [[RACSignal combineLatest:sliderSignals] subscribeNext:^(RACTuple *values) {
+
+        UIColor *color = [UIColor colorWithRed:((NSNumber*)values[0]).floatValue/255
+                                         green:((NSNumber*)values[1]).floatValue/255
+                                          blue:((NSNumber*)values[2]).floatValue/255
+                                         alpha:1.0];
         self.tagColor.backgroundColor = color;
         
     }];
