@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Color.h"
 
 @interface ViewController : UIViewController
+
+-(instancetype)initWithViewModel:(Color*)color;
 
 @end

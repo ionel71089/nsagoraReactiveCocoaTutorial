@@ -16,14 +16,25 @@
 
 @property (strong, nonatomic) IBOutletCollection(UITextField) NSArray *textFields;
 
+@property Color *color;
 
 @end
 
 @implementation ViewController
 
+-(instancetype)initWithViewModel:(Color *)color
+{
+    // TODO: learn how to initialize a view controller when using storyboards :)
+    self = [super init];
+    self.color = color;
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.color = [Color randomColor];
     
     self.tagColor.layer.borderColor = [UIColor blackColor].CGColor;
     self.tagColor.layer.borderWidth = 1.0;
@@ -39,7 +50,7 @@
         
         UISlider *slider = self.sliders[i];
         UITextField *textField = self.textFields[i];
-        slider.value = 128;
+        slider.value = self.color[i].intValue;
         
         RACSignal *sliderValue = [[[[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);

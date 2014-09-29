@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		23A5A796E6E7429A990C8D89 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 99285B72F358480881A30141 /* libPods.a */; };
+		EA54565519D9F1FB00FACDF5 /* Color.m in Sources */ = {isa = PBXBuildFile; fileRef = EA54565419D9F1FB00FACDF5 /* Color.m */; };
 		EAB9033B19B9F039006963BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB9033A19B9F039006963BA /* Foundation.framework */; };
 		EAB9033D19B9F039006963BA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB9033C19B9F039006963BA /* CoreGraphics.framework */; };
 		EAB9033F19B9F039006963BA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAB9033E19B9F039006963BA /* UIKit.framework */; };
@@ -38,6 +39,8 @@
 /* Begin PBXFileReference section */
 		616A65F28642417895AE1EFE /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		99285B72F358480881A30141 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA54565319D9F1FB00FACDF5 /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
+		EA54565419D9F1FB00FACDF5 /* Color.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Color.m; sourceTree = "<group>"; };
 		EAB9033719B9F039006963BA /* ReactiveTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReactiveTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB9033A19B9F039006963BA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EAB9033C19B9F039006963BA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -86,6 +89,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EA54565219D9F1D400FACDF5 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				EA54565319D9F1FB00FACDF5 /* Color.h */,
+				EA54565419D9F1FB00FACDF5 /* Color.m */,
+			);
+			name = ViewModel;
+			sourceTree = "<group>";
+		};
 		EAB9032E19B9F038006963BA = {
 			isa = PBXGroup;
 			children = (
@@ -122,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				EAB9037219B9F086006963BA /* Model */,
+				EA54565219D9F1D400FACDF5 /* ViewModel */,
 				EAB9037319B9F091006963BA /* View */,
 				EAB9034919B9F039006963BA /* AppDelegate.h */,
 				EAB9034A19B9F039006963BA /* AppDelegate.m */,
@@ -316,6 +329,7 @@
 			files = (
 				EAB9037119B9F080006963BA /* Tag.m in Sources */,
 				EAB9035119B9F039006963BA /* ViewController.m in Sources */,
+				EA54565519D9F1FB00FACDF5 /* Color.m in Sources */,
 				EAB9034B19B9F039006963BA /* AppDelegate.m in Sources */,
 				EAB9034719B9F039006963BA /* main.m in Sources */,
 			);
