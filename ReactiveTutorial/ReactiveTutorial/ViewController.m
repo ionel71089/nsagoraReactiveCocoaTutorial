@@ -49,9 +49,9 @@
     
     RAC(self.tagColor,backgroundColor) = [[RACSignal combineLatest:sliderSignals] map:^(RACTuple *values) {
         return [UIColor colorWithRed:((NSNumber*)values[0]).floatValue/255
-                                         green:((NSNumber*)values[1]).floatValue/255
-                                          blue:((NSNumber*)values[2]).floatValue/255
-                                         alpha:1.0];
+                               green:((NSNumber*)values[1]).floatValue/255
+                                blue:((NSNumber*)values[2]).floatValue/255
+                               alpha:1.0];
     }] ;
 
 }
