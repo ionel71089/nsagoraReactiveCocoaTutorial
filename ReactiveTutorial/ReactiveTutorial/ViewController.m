@@ -31,18 +31,38 @@
 
 -(void)bind
 {
-    UISlider *slider = self.sliders[0];
+    NSMutableArray *sliderSignals = [NSMutableArray array];
     
-    [[slider rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(UISlider *slider) {
-        NSLog(@"%f",slider.value);
+    for (int i = 0; i<3; i++) {
+        UISlider *slider = self.sliders[i];
+        UILabel *label = self.labels[i];
+        
+        RACSignal *signal = [slider rac_signalForControlEvents:UIControlEventValueChanged];
+        
+        [signal subscribeNext:^(UISlider *slider) {
+            label.text = [NSString stringWithFormat:@"%.0f",slider.value];
+        }];
+        
+        [sliderSignals addObject:signal];
+    }
+
+    [[RACSignal combineLatest:sliderSignals] subscribeNext:^(RACTuple *sliders) {
+        
+        NSMutableArray *values = [NSMutableArray array];
+        for (UISlider *slider in sliders) {
+            [values addObject:@(slider.value)];
+        }
+        
+        CGFloat red     = [values[0] floatValue];
+        CGFloat green   = [values[1] floatValue];
+        CGFloat blue    = [values[2] floatValue];
+        CGFloat alpha   = 1.0;
+        
+        UIColor *color = [UIColor colorWithRed:red/255 green:green/255 blue:blue/255 alpha:alpha];
+        self.tagColor.backgroundColor = color;
+        
     }];
-    
-}
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
 }
-
 
 @end
