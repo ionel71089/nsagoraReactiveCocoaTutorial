@@ -41,9 +41,11 @@
         UITextField *textField = self.textFields[i];
         slider.value = 128;
         
-        RACSignal *sliderValue = [[[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
+        RACSignal *sliderValue = [[[[slider rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
             return @(slider.value);
-        }] startWith:@(slider.value)];
+        }] startWith:@(slider.value)] doNext:^(id x) {
+            textField.backgroundColor = [UIColor clearColor];
+        }];
         
         [sliderSignals addObject:sliderValue];
         
@@ -65,11 +67,13 @@
         
     }
     
-    RAC(self.tagColor,backgroundColor) = [RACSignal combineLatest:sliderSignals reduce:^id(NSNumber *red,NSNumber *green,NSNumber *blue){
+    RAC(self.tagColor,backgroundColor) = [[RACSignal combineLatest:sliderSignals reduce:^id(NSNumber *red,NSNumber *green,NSNumber *blue){
         return [UIColor colorWithRed:red.floatValue/255
                                green:green.floatValue/255
                                 blue:blue.floatValue/255
                                alpha:1.0];
+    }] doNext:^(id x) {
+        [self.view endEditing:YES];
     }];
 }
 
