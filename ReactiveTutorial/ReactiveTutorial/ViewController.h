@@ -11,6 +11,4 @@
 
 @interface ViewController : UIViewController
 
--(instancetype)initWithViewModel:(Color*)color;
-
 @end

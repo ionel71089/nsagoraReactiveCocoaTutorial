@@ -22,19 +22,11 @@
 
 @implementation ViewController
 
--(instancetype)initWithViewModel:(Color *)color
-{
-    // TODO: learn how to initialize a view controller when using storyboards :)
-    self = [super init];
-    self.color = color;
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.color = [Color rozBomBon];
+    self.color = [Color randomColor];
     
     self.tagColor.layer.borderColor = [UIColor blackColor].CGColor;
     self.tagColor.layer.borderWidth = 1.0;
@@ -49,20 +41,9 @@
     RAC(((UISlider*)self.sliders[1]),value) = RACObserve(self.color, green);
     RAC(((UISlider*)self.sliders[2]),value) = RACObserve(self.color, blue);
     
-    // what should happen when the sliders change ?
-    RACSignal *redSliderSignal = [[self.sliders[0] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
-        return @(slider.value);
-    }];
-    RACSignal *greenSliderSignal = [[self.sliders[1] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
-        return @(slider.value);
-    }];
-    RACSignal *blueSliderSignal = [[self.sliders[2] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
-        return @(slider.value);
-    }];
-  
     // what value should that textfields be ?
     RAC(((UITextField*)self.textFields[0]),text) = [RACObserve(self.color, red) map:^id(NSNumber *value) {
-       return [NSString stringWithFormat:@"%.0f",value.floatValue];
+        return [NSString stringWithFormat:@"%.0f",value.floatValue];
     }];
     RAC(((UITextField*)self.textFields[1]),text) = [RACObserve(self.color, green) map:^id(NSNumber *value) {
         return [NSString stringWithFormat:@"%.0f",value.floatValue];
@@ -70,36 +51,33 @@
     RAC(((UITextField*)self.textFields[2]),text) = [RACObserve(self.color, blue) map:^id(NSNumber *value) {
         return [NSString stringWithFormat:@"%.0f",value.floatValue];
     }];
-
-    // what should happend when the textfields change ?
-    RACSignal *redTextSignal = [[[self.textFields[0] rac_textSignal] filter:^BOOL(NSString* text) {
-        return [self textIsValidSliderValue:text];
-    }] map:^id(NSString* value) {
-        return @(value.intValue);
-    }];
-    RACSignal *greenTextSignal = [[[self.textFields[1] rac_textSignal] filter:^BOOL(NSString* text) {
-        return [self textIsValidSliderValue:text];
-    }] map:^id(NSString* value) {
-        return @(value.intValue);
-    }];
-    RACSignal *blueTextSignal = [[[self.textFields[2] rac_textSignal] filter:^BOOL(NSString* text) {
-        return [self textIsValidSliderValue:text];
-    }] map:^id(NSString* value) {
-        return @(value.intValue);
-    }];
     
-    //what if the text is not valid ?
-    RAC(((UITextField*)self.textFields[0]),backgroundColor) = [[self.textFields[0] rac_textSignal] map:^id(NSString *text) {
-        return [self textIsValidSliderValue:text] ? [UIColor clearColor] : [UIColor yellowColor];
-    }];
+    // what should happen when the sliders change ?
+    NSMutableArray *sliderSignals   = [NSMutableArray array];
+    NSMutableArray *textSignals     = [NSMutableArray array];
     
-    RAC(((UITextField*)self.textFields[1]),backgroundColor) = [[self.textFields[1] rac_textSignal] map:^id(NSString *text) {
-        return [self textIsValidSliderValue:text] ? [UIColor clearColor] : [UIColor yellowColor];
-    }];
-    
-    RAC(((UITextField*)self.textFields[2]),backgroundColor) = [[self.textFields[2] rac_textSignal] map:^id(NSString *text) {
-        return [self textIsValidSliderValue:text] ? [UIColor clearColor] : [UIColor yellowColor];
-    }];
+    for(int i=0;i<3;i++)
+    {
+        // what should happen when the sliders change ?
+        [sliderSignals addObject:[[[self.sliders[i] rac_signalForControlEvents:UIControlEventValueChanged] map:^id(UISlider *slider) {
+            return @(slider.value);
+        }] doNext:^(id x) {
+            ((UITextField*)self.textFields[i]).backgroundColor = [UIColor clearColor];
+            [self.view endEditing:YES];
+        }]];
+     
+        // what should happend when the textfields change ?
+        [textSignals addObject:[[[self.textFields[i] rac_textSignal] filter:^BOOL(NSString* text) {
+            return [self textIsValidSliderValue:text];
+        }] map:^id(NSString* value) {
+            return @(value.intValue);
+        }]];
+        
+        //what if the text is not valid ?
+        RAC(((UITextField*)self.textFields[i]),backgroundColor) = [[self.textFields[i] rac_textSignal] map:^id(NSString *text) {
+            return [self textIsValidSliderValue:text] ? [UIColor clearColor] : [UIColor yellowColor];
+        }];
+    }
     
     // what color should the square be ?
     RAC(self.tagColor,backgroundColor) = [RACSignal combineLatest:@[RACObserve(self.color, red),RACObserve(self.color, green),RACObserve(self.color, blue)]
@@ -110,11 +88,10 @@
                                                  alpha:1.0];
     }];
 
-
     // what values should the view model have ?
-    RAC(self.color,red)     = [RACSignal merge:@[redSliderSignal,redTextSignal]];
-    RAC(self.color,green)   = [RACSignal merge:@[greenSliderSignal,greenTextSignal]];
-    RAC(self.color,blue)    = [RACSignal merge:@[blueSliderSignal,blueTextSignal]];
+    RAC(self.color,red)     = [RACSignal merge:@[sliderSignals[0],textSignals[0]]];
+    RAC(self.color,green)   = [RACSignal merge:@[sliderSignals[1],textSignals[1]]];
+    RAC(self.color,blue)    = [RACSignal merge:@[sliderSignals[2],textSignals[2]]];
 }
 
 -(BOOL)textIsValidSliderValue:(NSString*)text
